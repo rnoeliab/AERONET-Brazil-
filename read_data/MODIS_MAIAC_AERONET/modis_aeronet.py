@@ -6,18 +6,18 @@ Created on Wed Nov  6 14:43:53 2019
 @author: noelia
 """
 ###############################################################################
-###  despues de usar el modis_aod_local y aeronet.py ya tendremos los datos  ##
-###   guardados en excel. Ahora nos toca hacer una seleccion de datos para   ##
-###            un intervalo de tiempo y espacio del 2014 al 2019             ##    
+###   After using modis_aod_local.py and aeronet.py, we will have the data   ##
+###        saved in excel. Now we have to make a selection of data for       ##
+###              an interval of time and space from 2014 to 2019             ## 
 ###############################################################################
 
 import os
 import pandas as pd
 import numpy as np
 
-INPUT_AERONET ="/data/noelia/in-situ/aeronet/AOD/"
-INPUT_MODIS = "/data/noelia/imagen_data/modis/results/mod_local/"
-OUTPUT = "/data/noelia/imagen_data/modis/results/aero_mod/"
+INPUT_AERONET ="../in-situ/aeronet/AOD/"
+INPUT_MODIS = "../modis/results/mod_local/"
+OUTPUT = "../modis/results/aero_mod/"
 
 listdir_aero = os.listdir(INPUT_AERONET)
 listdir_modis = os.listdir(INPUT_MODIS)
@@ -26,7 +26,7 @@ listdir_modis =sorted(listdir_modis, key=str.lower)
 
 for m in listdir_aero:
     for n in listdir_modis:  
-        if m[0:4] in n:       ### selecciona el año  
+        if m[0:4] in n:       ### select the year  
             if m[5:-8] in n:
                 print(m, n)
                 aer = pd.read_csv(INPUT_AERONET+m)
@@ -67,7 +67,7 @@ for m in listdir_aero:
                     minu_30_aer = []
                     minu_15_aer = []
                     for k in range(len(aer)):
-                        ####  agrupando por dia
+                        ####  group by day
                         if (modis["year"][j]+"-"+modis["month"][j]+"-"+modis["day"][j] == aer["Date(dd:mm:yyyy)"][k][6:10]+"-"+aer["Date(dd:mm:yyyy)"][k][3:5]+"-"+aer["Date(dd:mm:yyyy)"][k][0:2]):                                               
                             print("mismo dia:", modis["day"][j] + "-" + modis["month"][j] + "-" + modis["year"][j])
                             ### agrupando por hora
