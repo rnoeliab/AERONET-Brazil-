@@ -14,7 +14,7 @@
 ![Alt text](https://github.com/rnoeliab/AERONET-Brazil-/blob/main/figures/stations.jpg)
 
 ### Second, extract and read the satellite data 
-* For this step, we are going to remember a bit how to obtain the MODIS data explained in the repository [Satellite-WRF-Model] (https://github.com/rnoeliab/ Satellite-WRF-Model). At the end of the download, we will use the script [modis_aod_local.py] (https://github.com/rnoeliab/AERONET-Brazil-/blob/main/read_data/MODIS_MAIAC_AERONET/modis_aod_local.py) to extract the AOD values for a specific point. 
+* For this step, we are going to remember a bit how to obtain the MODIS data explained in the repository [Satellite-WRF-Model](https://github.com/rnoeliab/ Satellite-WRF-Model). At the end of the download, we will use the script [modis_aod_local.py](https://github.com/rnoeliab/AERONET-Brazil-/blob/main/read_data/MODIS_MAIAC_AERONET/modis_aod_local.py) to extract the AOD values for a specific point. 
 
 ### Third, Compare both data (AERONET and Satellite)
 *
