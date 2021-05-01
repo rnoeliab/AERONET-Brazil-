@@ -9,6 +9,10 @@
 * In the folder [read_data/AERONET](https://github.com/rnoeliab/AERONET-Brazil-/tree/main/read_data/AERONET) there are three scripts to read the AERONET data, plot the time series and display the stations in the domain. 
     - The [read_aeronet.py](https://github.com/rnoeliab/AERONET-Brazil-/blob/main/read_data/AERONET/read_aeronet.py) script will read the data downloaded from the [AERONOET](https://aeronet.gsfc.nasa.gov/cgi-bin/draw_map_display_aod_v3) website. In it, the AOD values for seven wavelengths will be considered and the AOD values for 550 nm will be calculated. That data will be saved and created with a different name. 
     - 
+
+![Alt text](https://github.com/rnoeliab/AERONET-Brazil-/blob/main/figures/stations.jpg)
+
+
 ### Second, extract and read the satellite data 
 *
 ### Third, Compare both data (AERONET and Satellite)
