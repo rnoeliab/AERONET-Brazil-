@@ -60,7 +60,7 @@ m.drawcoastlines(linewidth=1.5)
 m.drawstates(linewidth=1.5)    
 m.drawparallels(np.arange(-90., 120., 1),fontsize=22)
 m.drawmeridians(np.arange(-180., 181., 1),fontsize=22) 
-m.readshapefile('/media/noelia/TOSHIBA EXT/doctorado/usp/shapefile/RM_Sao_Paulo/transformed','sp')
+m.readshapefile('../shapefile/RM_Sao_Paulo/transformed','sp')
 x1,y1 = m(lon, lat)
 trend1 = m.pcolormesh(x1,y1, data/1000, cmap=cmap, norm = norm)
 
