@@ -18,9 +18,9 @@ import matplotlib.cm as cm
 from matplotlib.ticker import MaxNLocator
 import adjustText as aT
 
-path_wrf = '/media/noelia/TOSHIBA EXT/doctorado/usp/modelo/WRF_model/wrf_model_wps/2_dominio/'
-output = '/media/noelia/TOSHIBA EXT/doctorado/usp/modelo/figures/plot_cetesb_wrf/'
-################################## DOMINIO 1 ##################################
+path_wrf = '../modelo/WRF_model/wrf_model_wps/2_dominio/'
+output = '../modelo/figures/plot_cetesb_wrf/'
+################################## DOMAIN 1 ##################################
 ncfile = Dataset(path_wrf+"wrfinput_d01")
 hgt = getvar(ncfile, "HGT")
 data = hgt.values
@@ -28,7 +28,7 @@ data = hgt.values
 lat = getvar(ncfile, "XLAT").values
 lat_inver = lat[::-1]
 lon = getvar(ncfile, "XLONG").values
-################################## DOMINIO 2 ##################################
+################################## DOMAIN 2 ##################################
 ncfile2 = Dataset(path_wrf+"wrfinput_d02")
 hgt2 = getvar(ncfile2, "HGT")
 data2 = hgt2.values
@@ -37,7 +37,7 @@ lat2 = getvar(ncfile2, "XLAT").values
 lat2_inver = lat2[::-1]
 lon2 = getvar(ncfile2, "XLONG").values
 
-###################### posicion de las estaciones ###########################
+###################### stations ###########################
 sta_lat, sta_lon = ([-23.561,-22.413,-23.482,-22.689],[-46.735,-45.452,-46.500,-45.006])
 station = ['Sao_Paulo','Itajuba','SP-EACH','Cachoeira_Paulista']
 
