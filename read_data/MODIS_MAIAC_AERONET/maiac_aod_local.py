@@ -6,13 +6,12 @@ Created on Tue Nov  3 06:37:09 2020
 @author: noelia
 """
 
-################################################################################### 
-##### Este algoritmo sirve para encontrar el pixel mas cercano de las estaciones ##
-####  AERONET en el estado de Sao Paulo. Se exporta los datos en un excel        ## 
-####  en la direccion "/dados/noelia/results/maiac_local/"                       ##
-####   un analisis para varios años 2014 - 2020   
-#####     despues de usar este algoritmo, utilizar el modis_aeronet.py           ##  
-###################################################################################
+####################################################################################
+#####     This algorithm is used to find the closest pixel of the AERONET        ###
+####    stations in the state of Sao Paulo. The data is exported in an excel     ###
+####               for an analysis of several years 2014 - 2020                  ###
+#####          after using this algorithm, use the modis_aeronet.py              ###
+#################################################################################### 
 
 import pandas as pd
 import numpy as np
@@ -29,9 +28,9 @@ import calendar
 USE_GDAL = False
 
 #open several data
-INPUT_PATH = '/data/noelia/imagen_data/modis/DATA/SP/DADOS MAIAC/'
+INPUT_PATH = '../SP/DADOS MAIAC/'
 listdir = os.listdir(INPUT_PATH)
-OUT_PATH = '/data/noelia/imagen_data/modis/results/maiac_local/'
+OUT_PATH = '../results/maiac_local/'
 
 
 sta_lat, sta_lon = ([-23.561,-22.413,-23.482,-22.689],[-46.735,-45.452,-46.500,-45.006])
