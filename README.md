@@ -164,6 +164,18 @@ time_serie.to_csv(OUT_PATH+FILE_NAME[10:14]+"_"+name+"_"+FILE_NAME[6:8]+"_MODIS_
 ```
 
 ### Third, Compare both data (AERONET and Satellite)
+
+
+
 *
 ### Finally, Analysis both data (AERONET and Satellite)
+
+![Alt text](https://github.com/rnoeliab/AERONET-Brazil-/blob/main/figures/Sao_Paulo_3K_DT_AOD_terra.png)
+![Alt text](https://github.com/rnoeliab/AERONET-Brazil-/blob/main/figures/Sao_Paulo_3K_DT_AOD_aqua.png)
+
+
+
+
+
+
 
