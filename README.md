@@ -35,8 +35,7 @@ import time
 import calendar
 ```
  
-* Before extracting the AOD values for a certain position, the MODIS sensor data will have to be reprojected, from sinusoidal coordinate to vertical coordinate, 
-
+* Extracting the AOD values for a certain position, only select a product of the MODIS sensor:
 ```
 POINTS:
 sta_lat, sta_lon = ([-23.561,-22.413,-23.482,-22.689],[-46.735,-45.452,-46.500,-45.006])
@@ -46,8 +45,13 @@ PRODUCTS of MODIS sensor:
 #var_name = 'AOD_550_Dark_Target_Deep_Blue_Combined'   ## (1)
 #var_name = 'Optical_Depth_Land_And_Ocean'              ## (2)   
 #var_name = 'Deep_Blue_Aerosol_Optical_Depth_550_Land'  ## (3)
+```
+* Here we are going to sort the MODIS files to read by resolution, product and year in each AERONET station:
+``` python
+#open several data
+INPUT_PATH = '../imagen_data/modis/DATA/'
+listdir = os.listdir(INPUT_PATH)
 
-For both resolutions, in listdir, we have stored all the data *hdf 
 for user_lat,user_lon,name_station in zip(sta_lat,sta_lon,station):
     for k in range(len(listdir)):    #### 3K  and 10K
         if listdir[k] == "3K":
@@ -60,10 +64,104 @@ for user_lat,user_lon,name_station in zip(sta_lat,sta_lon,station):
                 list_mod = os.listdir(input_modis) 
                 dim=len(list_mod)
                 order=sorted(list_mod, key=str.lower)
-
-
+                mylist=[]
+                listdirr = []
+                time_serie = pd.DataFrame({'IP':[]})
+                for i in range(len(order)):
+                    if i == (len(order)-1):
+                        break;      
+                    else:
+                        if order[i][0:17] == order[i + 1][0:17]:
+                            listdirr.append(order[i])          
+                            if i == (len(order)-2):
+                                listdirr.append(order[len(order)-1])
+                                mylist.append(listdirr)               
+                        else:
+                            listdirr.append(order[i])
+                            mylist.append(listdirr)
+                            listdirr = []
+                count=0
+                for n in range(len(mylist)):
+                    for FILE_NAME in mylist[n]:
+                        FILE_NAME=FILE_NAME.strip()                                       
+                        hdf = SD(input_modis+FILE_NAME, SDC.READ)
+                        ...
 ```
-* 
+* Then, we going to extract the latitudes, longitudes, times and AOD data.
+* Calculating the shortest distance between two points, using the haversine formula:
+
+```python
+R=6371000  ## Radius of the earth in meters 
+lat1=np.radians(user_lat)
+lat2=np.radians(latitude)
+delta_lat=np.radians(latitude-user_lat)
+delta_lon=np.radians(longitude-user_lon)
+a=(np.sin(delta_lat/2))*(np.sin(delta_lat/2))+(np.cos(lat1))*(np.cos(lat2))*(np.sin(delta_lon/2))*(np.sin(delta_lon/2))
+c=2*np.arctan2(np.sqrt(a),np.sqrt(1-a))
+d=R*c 
+```
+* After, let's calculate the appropriate position of the closest distance:
+```python
+x,y=np.unravel_index(d.argmin(),d.shape) 
+print('the pixel closest to the entered point is: Latitude:', latitude[x,y], 'longitude:', longitude[x,y])
+```
+* Now, the UTC and local time, latitude, longitude, AOD data and distance will be stored:
+```python
+if scan_time[x,y] == 0.0:
+    scan_time[x,y] = scan_time.max()
+time_serie.loc[count,'scan_time'] = scan_time[x,y]
+# temp=time.gmtime(scan_time[x,y]+calendar.timegm(time.strptime('Dec 31, 1992 @ 23:59:59 UTC','%b %d, %Y @ %H:%M:%S UTC')))   ### UTC time
+temp=scan_time[x,y]+calendar.timegm(time.strptime('Dec 31, 1992 @ 23:59:59 UTC','%b %d, %Y @ %H:%M:%S UTC'))   ### timestamps utc
+time_serie.loc[count,'year'] = datetime.fromtimestamp(temp).strftime('%Y')  ## Local Time
+time_serie.loc[count,'month'] = datetime.fromtimestamp(temp).strftime('%m')
+time_serie.loc[count,'day'] = datetime.fromtimestamp(temp).strftime('%d')
+time_serie.loc[count,'hour'] = datetime.fromtimestamp(temp).strftime('%H')
+time_serie.loc[count,'min'] = datetime.fromtimestamp(temp).strftime('%M')
+time_serie.loc[count,'sec'] = datetime.fromtimestamp(temp).strftime('%S')
+time_serie.loc[count,'distancia'] = d[x,y]
+time_serie.loc[count,'latitud'] = latitude[x,y]
+time_serie.loc[count,'longitud'] = longitude[x,y]                
+time_serie.loc[count,'AOD'] = round(data[x,y]*scale_factor,3)
+```
+* If the AOD = fillvalue, then the AOD value will be calculated with the neighboring pixels, considering an area of 3x3, in which the Fillvalue pixel is in the center. 
+```ptyhon
+if x < 1:
+    x+=1
+if x > data.shape[0]-2:
+    x-=2
+if y < 1:
+    y+=1
+if y > data.shape[1]-2:
+    y-=2
+three_by_three=data[x-1:x+2,y-1:y+2]
+three_by_three=three_by_three.astype(float)
+three_by_three[three_by_three==float(fillvalue)]=np.nan
+nnan=np.count_nonzero(~np.isnan(three_by_three))
+time_serie.loc[count,'count 3x3'] = nnan
+if nnan==0:
+    print('There are no valid pixels on a 3x3 grill in the given location')
+    time_serie.loc[count,'AOD 3x3 mean'] = np.nan
+    count=count+1
+else:
+    three_by_three=three_by_three*scale_factor
+    three_by_three_average=np.nanmean(three_by_three)
+    three_by_three_std=np.nanstd(three_by_three)
+    three_by_three_median=np.nanmedian(three_by_three)
+    if nnan==1:
+        npixels='is'
+        mpixels='pixel'
+    else:
+        npixels='are'
+        mpixels='pixels'
+    time_serie.loc[count,'AOD 3x3 mean'] = three_by_three_average
+    time_serie.loc[count,'AOD_std'] = three_by_three_std
+    time_serie.loc[count,'AOD_median'] = three_by_three_median
+    count=count+1
+```
+* Finally, the stored data will be saved:
+```python
+time_serie.to_csv(OUT_PATH+FILE_NAME[10:14]+"_"+name+"_"+FILE_NAME[6:8]+"_MODIS_"+str(name_station)+".csv", index=False)
+```
 
 ### Third, Compare both data (AERONET and Satellite)
 *
