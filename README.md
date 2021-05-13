@@ -164,7 +164,6 @@ time_serie.to_csv(OUT_PATH+FILE_NAME[10:14]+"_"+name+"_"+FILE_NAME[6:8]+"_MODIS_
 ```
 
 ### Third, Compare both data (AERONET and Satellite)
-*
 ```python
 INPUT_AERONET ="../in-situ/aeronet/AOD/"
 INPUT_MODIS = "../modis/results/mod_local/"
