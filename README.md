@@ -164,10 +164,56 @@ time_serie.to_csv(OUT_PATH+FILE_NAME[10:14]+"_"+name+"_"+FILE_NAME[6:8]+"_MODIS_
 ```
 
 ### Third, Compare both data (AERONET and Satellite)
-
-
-
 *
+```python
+INPUT_AERONET ="../in-situ/aeronet/AOD/"
+INPUT_MODIS = "../modis/results/mod_local/"
+OUTPUT = "../modis/results/aero_mod/"
+
+listdir_aero = os.listdir(INPUT_AERONET)
+listdir_modis = os.listdir(INPUT_MODIS)
+
+for m in listdir_aero:
+    for n in listdir_modis:  
+        if m[0:4] in n:       ### select the year  
+            if m[5:-8] in n:
+                aer = pd.read_csv(INPUT_AERONET+m)
+                mod = pd.read_csv(INPUT_MODIS+n)
+```
+* Use,  `mod["year"] = mod["year"].astype(int).astype(str)` for "year,month,day,hour,min and sec".
+* This script is important because it selects the AOD data from the AERONET stations with a time of 60, 30 and 15 minutes before and after the passage of the MODIS sensor: 
+```python
+for k in range(len(aer)):
+    ####  group by day
+    if (modis["year"][j]+"-"+modis["month"][j]+"-"+modis["day"][j] == aer["Date(dd:mm:yyyy)"][k][6:10]+"-"+aer["Date(dd:mm:yyyy)"][k][3:5]+"-"+aer["Date(dd:mm:yyyy)"][k][0:2]):                                               
+        print("same day:", modis["day"][j] + "-" + modis["month"][j] + "-" + modis["year"][j])
+        ### group by 60 minutes
+        cal = (float(modis["hour"][j])*60+float(modis["min"][j])) - (float(aer["Time(hh:mm:ss)"][k][0:2])*60+float(aer["Time(hh:mm:ss)"][k][3:5]))
+        if -60 <= cal and cal <=60:
+            print('less the +-60 min')
+            date_aer.append(aer["AOD_550nm-AOD"][k])
+            data.loc[j,"time_+-60_min_aero"] = aer["Time(hh:mm:ss)"][k]
+        prom = np.nanmean(date_aer)
+        data.loc[j, "prom_60_min_AOD_aero"] = prom
+        #### group by 30 minutes
+        if -30<=cal and cal<=30:
+            print('less the +-30 min')
+            minu_30_aer.append(aer["AOD_550nm-AOD"][k])
+            data.loc[j,"time_+-30_min_aero"] = aer["Time(hh:mm:ss)"][k]
+        prom_30_minu = np.nanmean(minu_30_aer)
+        data.loc[j, "prom_30_min_AOD_aero"] = prom_30_minu
+        #### group by 15 minutes
+        if -15<=cal and cal<=15:
+            print('less the +-15 min')
+            minu_15_aer.append(aer["AOD_550nm-AOD"][k])
+            data.loc[j,"time_+-15_min_aero"] = aer["Time(hh:mm:ss)"][k]
+        prom_15_minu = np.nanmean(minu_15_aer)
+        data.loc[j, "prom_15_min_AOD_aero"] = prom_15_minu
+data['AOD modis'][data['AOD modis']<0.0] = np.nan
+data['AOD 3x3 mean'][data['AOD 3x3 mean']<0.0] = np.nan
+
+data.to_csv(OUTPUT+n[0:-4] + "_AERONET.csv", index=None)           
+```           
 ### Finally, Analysis both data (AERONET and Satellite)
 
 ![Alt text](https://github.com/rnoeliab/AERONET-Brazil-/blob/main/figures/Sao_Paulo_3K_DT_AOD_terra.png)
