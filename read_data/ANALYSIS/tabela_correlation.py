@@ -6,9 +6,9 @@ Created on Tue Nov 24 10:22:39 2020
 @author: noelia
 """
 ###############################################################################
-# Este script esta hecho para calcular la correlacion entre los datos MODIS y #
-# AERONET para tres productos DT, DB y MAIAC con tres resoluciones diferentes #
-# 10km, 3km y 1km para todo el periodo y dividido en temporadas.              #
+# This script is made to calculate the correlation between the MODIS data and #
+# AERONET for three DT, DB and MAIAC products with three different resolutions#
+# 10km, 3km and 1km for the entire period and divided into seasons.           #
 ###############################################################################
 
 import os
@@ -17,19 +17,19 @@ import pandas as pd
 import datetime
 from scipy import stats
 
-INPUT_AERONET_MODIS = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod/"
-INPUT_AERONET_MAIAC = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_maiac/"
+INPUT_AERONET_MODIS = "/imagen_data/modis/results/aero_mod/"
+INPUT_AERONET_MAIAC = "/imagen_data/modis/results/aero_maiac/"
 lis_modis = os.listdir(INPUT_AERONET_MODIS)
 lis_modis =sorted(lis_modis, key=str.lower)
 lis_maiac = os.listdir(INPUT_AERONET_MAIAC)
 lis_maiac =sorted(lis_maiac, key=str.lower)
 
-OUTPUT = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod_statis/estadistica/"
+OUTPUT = "/imagen_data/modis/results/aero_mod_statis/estadistica/"
 
 cities = ["Sao_Paulo","SP-EACH","Itajuba","Cachoeira_Paulista"]
 name = ["prom_60_min_AOD_aero","prom_30_min_AOD_aero","prom_15_min_AOD_aero"]
 
-####################### TODO EL PERIODO 2014 - 2019 ###########################
+####################### all period (2014 - 2019) ###########################
 ############################# MODIS ###########################################
 def modis_all(INPUT_AERONET_MODIS,data,city,resol,listdir,prod):
     for n in range(len(listdir)):
@@ -47,7 +47,7 @@ def modis_all(INPUT_AERONET_MODIS,data,city,resol,listdir,prod):
     data['satelite'] = [d[0:5] for d in data['IP']]
     terra = data[data['satelite'] == 'MOD04'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'MYD04'].reset_index(drop=True)
-    ###################### calculo de la correlacion ########################
+    ###################### correlation calculation  ########################
     num_t = []
     corre_terra = []
     for w in range(3):
@@ -110,7 +110,7 @@ def maiac_all(INPUT_AERONET_MAIAC,data,city,listdir,prod):
     data['satelite'] = [d[-1::] for d in data['IP']]
     terra = data[data['satelite'] == 'T'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'A'].reset_index(drop=True)
-    ###################### calculo de la correlacion ########################
+    ###################### correlation calculation  ########################
     num_t = []
     corre_terra = []
     for w in range(3):
@@ -153,7 +153,7 @@ for city in cities:
     count = count + 1
 data_corre.to_csv(OUTPUT+"tabla_correlacion_MAIAC.csv", index=False)
 
-############################### POR TEMPORADA #################################
+############################### by season #################################
 sumer = ['Dec','Jan','Feb']
 fall = ['Mar','Apr','May']
 winter = ['Jun','Jul','Aug']
@@ -176,7 +176,7 @@ def modis_temporada(INPUT_AERONET_MODIS,data,city,resol,listdir,prod):
     data['satelite'] = [d[0:5] for d in data['IP']]
     terra = data[data['satelite'] == 'MOD04'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'MYD04'].reset_index(drop=True)
-    ######################### SEPARAR POR TEMPORADA ###########################
+    ######################### SEPARATE BY SEASON  ###########################
     for s,f,w,sp in zip(sumer,fall,winter,spring):
         terra.loc[terra.loc[:,'month']==str(s),'temporada'] = 'DJF'
         terra.loc[terra.loc[:,'month']==str(f),'temporada'] = 'MAM'
@@ -188,7 +188,7 @@ def modis_temporada(INPUT_AERONET_MODIS,data,city,resol,listdir,prod):
         aqua.loc[aqua.loc[:,'month']==str(f),'temporada'] = 'MAM'
         aqua.loc[aqua.loc[:,'month']==str(w),'temporada'] = 'JJA'
         aqua.loc[aqua.loc[:,'month']==str(sp),'temporada'] = 'SON'
-####################### calculo de la correlacion #########################
+####################### correlation calculation  #########################
     num_t = []
     corre_terra = []
     for temp in ['DJF','MAM','JJA','SON']:
@@ -257,7 +257,7 @@ def maiac_temporada(INPUT_AERONET_MAIAC,data,city,listdir,prod):
     data['satelite'] = [d[-1::] for d in data['IP']]
     terra = data[data['satelite'] == 'T'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'A'].reset_index(drop=True)
-    ######################### SEPARAR POR TEMPORADA ###########################
+    ######################### SEPARATE BY SEASON  ###########################
     for s,f,w,sp in zip(sumer,fall,winter,spring):
         terra.loc[terra.loc[:,'month']==str(s),'temporada'] = 'DJF'
         terra.loc[terra.loc[:,'month']==str(f),'temporada'] = 'MAM'
@@ -269,7 +269,7 @@ def maiac_temporada(INPUT_AERONET_MAIAC,data,city,listdir,prod):
         aqua.loc[aqua.loc[:,'month']==str(f),'temporada'] = 'MAM'
         aqua.loc[aqua.loc[:,'month']==str(w),'temporada'] = 'JJA'
         aqua.loc[aqua.loc[:,'month']==str(sp),'temporada'] = 'SON'
-####################### calculo de la correlacion #########################
+####################### correlation calculation  #########################
     num_t = []
     corre_terra = []
     for temp in ['DJF','MAM','JJA','SON']:
