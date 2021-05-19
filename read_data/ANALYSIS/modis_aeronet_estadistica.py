@@ -14,8 +14,8 @@ from scipy import stats
 import matplotlib.lines as mlines
 import seaborn as sns
 
-INPUT_AERONET_MODIS = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod/"
-OUTPUT = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod_statis/"
+INPUT_AERONET_MODIS = "/imagen_data/modis/results/aero_mod/"
+OUTPUT = "/imagen_data/modis/results/aero_mod_statis/"
 listdir = os.listdir(INPUT_AERONET_MODIS)
 listdir =sorted(listdir, key=str.lower)
 
