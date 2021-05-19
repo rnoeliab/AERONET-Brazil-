@@ -14,13 +14,13 @@ import matplotlib
 import datetime
 
 
-INPUT_AERONET_MODIS = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod/"
-INPUT_AERONET_MAIAC = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_maiac/"
+INPUT_AERONET_MODIS = "/imagen_data/modis/results/aero_mod/"
+INPUT_AERONET_MAIAC = "/imagen_data/modis/results/aero_maiac/"
 lis_modis = os.listdir(INPUT_AERONET_MODIS)
 lis_modis =sorted(lis_modis, key=str.lower)
 lis_maiac = os.listdir(INPUT_AERONET_MAIAC)
 lis_maiac =sorted(lis_maiac, key=str.lower)
-OUTPUT = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/plot_Aero_550/"
+OUTPUT = "/imagen_data/modis/results/plot_Aero_550/"
 
 cities = ["Sao_Paulo","SP-EACH","Itajuba","Cachoeira_Paulista"]
 name = ["prom_60_min_AOD_aero","prom_30_min_AOD_aero","prom_15_min_AOD_aero"]
@@ -29,7 +29,7 @@ diss = ['3km','15km','25km','50km']
 marker = ["*","v","s"]
 colour = ["blue","red","green"]
 
-####################### TODO EL PERIODO 2014 - 2019 ###########################
+####################### all period (2014 - 2019) ###########################
 ############################# MODIS ###########################################
 def modis_cor_all(OUTPUT,INPUT_AERONET_MODIS,data,city,resol,listdir,prod,prod_name):
     for n in range(len(listdir)):
@@ -44,7 +44,7 @@ def modis_cor_all(OUTPUT,INPUT_AERONET_MODIS,data,city,resol,listdir,prod,prod_n
     data['satelite'] = [d[0:5] for d in data['IP']]
     terra = data[data['satelite'] == 'MOD04'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'MYD04'].reset_index(drop=True)
-    ############################### Distancia #################################
+    ############################### Distance #################################
     for dist,dd in zip(distancia,['D1','D2','D3','D4']):
         terra.loc[terra.loc[:,'distancia']<=dist,str(dd)] = dd
         aqua.loc[aqua.loc[:,'distancia']<=dist,str(dd)] = dd
@@ -120,7 +120,7 @@ def maiac_all(OUTPUT,INPUT_AERONET_MAIAC,data,city,listdir,prod):
     data['satelite'] = [d[-1::] for d in data['IP']]
     terra = data[data['satelite'] == 'T'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'A'].reset_index(drop=True)
-    ############################### Distancia #################################
+    ############################### Distance #################################
     for dist,dd in zip(distancia,['D1','D2','D3','D4']):
         terra.loc[terra.loc[:,'distancia']<=dist,str(dd)] = dd
         aqua.loc[aqua.loc[:,'distancia']<=dist,str(dd)] = dd
