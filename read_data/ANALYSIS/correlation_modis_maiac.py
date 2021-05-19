@@ -16,15 +16,15 @@ from matplotlib import path
 import matplotlib
 from sklearn.metrics import mean_squared_error
 
-INPUT_AERONET_MODIS = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod/"
-INPUT_AERONET_MAIAC = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_maiac/"
+INPUT_AERONET_MODIS = "/imagen_data/modis/results/aero_mod/"
+INPUT_AERONET_MAIAC = "/imagen_data/modis/results/aero_maiac/"
 
 lis_modis = os.listdir(INPUT_AERONET_MODIS)
 lis_modis =sorted(lis_modis, key=str.lower)
 lis_maiac = os.listdir(INPUT_AERONET_MAIAC)
 lis_maiac =sorted(lis_maiac, key=str.lower)
 
-OUTPUT = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod_statis/estadistica/figures/correlation/"
+OUTPUT = "/imagen_data/modis/results/aero_mod_statis/estadistica/figures/correlation/"
 
 cities = ["Sao_Paulo","SP-EACH","Itajuba","Cachoeira_Paulista"]
 name = ["prom_60_min_AOD_aero","prom_30_min_AOD_aero","prom_15_min_AOD_aero"]
@@ -47,7 +47,7 @@ def ME(data_obs,data_model):
     me = np.nanmean(diff)
     return me
 
-####################### TODO EL PERIODO 2014 - 2019 ###########################
+####################### all period (2014 - 2019) ###########################
 ############################# MODIS ###########################################
 def modis_cor_all(OUTPUT,INPUT_AERONET_MODIS,data,city,resol,listdir,prod,prod_name):
     for n in range(len(listdir)):
@@ -65,7 +65,7 @@ def modis_cor_all(OUTPUT,INPUT_AERONET_MODIS,data,city,resol,listdir,prod,prod_n
     data['satelite'] = [d[0:5] for d in data['IP']]
     terra = data[data['satelite'] == 'MOD04'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'MYD04'].reset_index(drop=True)
-    ############################### Distancia #################################
+    ############################### Distance #################################
     for dist,dd in zip(distancia,['D1','D2','D3','D4']):
         terra.loc[terra.loc[:,'distancia']<=dist,str(dd)] = dd
         aqua.loc[aqua.loc[:,'distancia']<=dist,str(dd)] = dd
@@ -207,7 +207,7 @@ for city in cities:
     for r,p,pro_name in zip(resol,product,prod_name):
         modis_cor_all(OUTPUT,INPUT_AERONET_MODIS,data,city,r,lis_modis,p,pro_name)
 
-############################### POR TEMPORADA #################################
+############################### by station #################################
 sumer = ['Dec','Jan','Feb']
 fall = ['Mar','Apr','May']
 winter = ['Jun','Jul','Aug']
@@ -229,7 +229,7 @@ def modis_temporada(OUTPUT,INPUT_AERONET_MODIS,data,city,resol,listdir,prod,prod
     data['satelite'] = [d[0:5] for d in data['IP']]
     terra = data[data['satelite'] == 'MOD04'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'MYD04'].reset_index(drop=True)
-    ######################### SEPARAR POR TEMPORADA ###########################
+    ######################### SEPARATE BY SEASON  ###########################
     for s,f,w,sp in zip(sumer,fall,winter,spring):
         terra.loc[terra.loc[:,'month']==str(s),'temporada'] = 'DJF'
         terra.loc[terra.loc[:,'month']==str(f),'temporada'] = 'MAM'
@@ -241,7 +241,7 @@ def modis_temporada(OUTPUT,INPUT_AERONET_MODIS,data,city,resol,listdir,prod,prod
         aqua.loc[aqua.loc[:,'month']==str(f),'temporada'] = 'MAM'
         aqua.loc[aqua.loc[:,'month']==str(w),'temporada'] = 'JJA'
         aqua.loc[aqua.loc[:,'month']==str(sp),'temporada'] = 'SON'
-    ############################### Distancia #################################
+    ############################### Distance #################################
     for dist,dd in zip(distancia,['D1','D2','D3','D4']):
         terra.loc[terra.loc[:,'distancia']<=dist,str(dd)] = dd
         aqua.loc[aqua.loc[:,'distancia']<=dist,str(dd)] = dd
@@ -401,7 +401,7 @@ def maiac_all(OUTPUT,INPUT_AERONET_MAIAC,data,city,listdir,prod):
     data['satelite'] = [d[-1::] for d in data['IP']]
     terra = data[data['satelite'] == 'T'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'A'].reset_index(drop=True)
-    ############################### Distancia #################################
+    ############################### Distance #################################
     for dist,dd in zip(distancia,['D1','D2','D3','D4']):
         terra.loc[terra.loc[:,'distancia']<=dist,str(dd)] = dd
         aqua.loc[aqua.loc[:,'distancia']<=dist,str(dd)] = dd
@@ -535,7 +535,7 @@ for city in cities:
     data = pd.DataFrame()
     maiac_all(OUTPUT,INPUT_AERONET_MAIAC,data,city,lis_maiac,'MAIAC')
 
-############################## POR TEMPORADA ##################################
+############################## by season ##################################
 def maiac_temporada(OUTPUT,INPUT_AERONET_MAIAC,data,city,listdir,prod):
     for n in range(len(listdir)):
         names = listdir[n][0:13]+str(prod)+'_'+str(city)+'_AERONET.csv'
@@ -552,7 +552,7 @@ def maiac_temporada(OUTPUT,INPUT_AERONET_MAIAC,data,city,listdir,prod):
     data['satelite'] = [d[-1::] for d in data['IP']]
     terra = data[data['satelite'] == 'T'].reset_index(drop=True)
     aqua = data[data['satelite'] == 'A'].reset_index(drop=True)
-    ######################### SEPARAR POR TEMPORADA ###########################
+    ######################### SEPARATE BY SEASON  ###########################
     for s,f,w,sp in zip(sumer,fall,winter,spring):
         terra.loc[terra.loc[:,'month']==str(s),'temporada'] = 'DJF'
         terra.loc[terra.loc[:,'month']==str(f),'temporada'] = 'MAM'
@@ -564,7 +564,7 @@ def maiac_temporada(OUTPUT,INPUT_AERONET_MAIAC,data,city,listdir,prod):
         aqua.loc[aqua.loc[:,'month']==str(f),'temporada'] = 'MAM'
         aqua.loc[aqua.loc[:,'month']==str(w),'temporada'] = 'JJA'
         aqua.loc[aqua.loc[:,'month']==str(sp),'temporada'] = 'SON'
-    ############################### Distancia #################################
+    ############################### Distance #################################
     for dist,dd in zip(distancia,['D1','D2','D3','D4']):
         terra.loc[terra.loc[:,'distancia']<=dist,str(dd)] = dd
         aqua.loc[aqua.loc[:,'distancia']<=dist,str(dd)] = dd
