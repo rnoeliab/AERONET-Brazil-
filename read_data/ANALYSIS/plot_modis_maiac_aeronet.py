@@ -12,14 +12,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-INPUT_AERONET_MODIS = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod/"
-INPUT_AERONET_MAIAC = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_maiac/"
+INPUT_AERONET_MODIS = "/imagen_data/modis/results/aero_mod/"
+INPUT_AERONET_MAIAC = "/imagen_data/modis/results/aero_maiac/"
 
 listdir = os.listdir(INPUT_AERONET_MODIS)
 listdir =sorted(listdir, key=str.lower)
 listdir1 = os.listdir(INPUT_AERONET_MAIAC)
 listdir1 =sorted(listdir1, key=str.lower)
-OUTPUT = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/plot_Aero_550/"
+OUTPUT = "/imagen_data/modis/results/plot_Aero_550/"
 
 months = list(pd.date_range(start='01-01-2017',end='31-12-2017',freq='M').strftime('%b'))
 
