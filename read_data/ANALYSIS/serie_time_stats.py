@@ -12,8 +12,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 
-INPUT_AERONET_MODIS = "/data/noelia/imagen_data/modis/results/aero_mod/"
-OUTPUT = "/data/noelia/imagen_data/modis/results/aero_mod_statis/"
+INPUT_AERONET_MODIS = "/imagen_data/modis/results/aero_mod/"
+OUTPUT = "/imagen_data/modis/results/aero_mod_statis/"
 listdir = os.listdir(INPUT_AERONET_MODIS)
 listdir =sorted(listdir, key=str.lower)
 
