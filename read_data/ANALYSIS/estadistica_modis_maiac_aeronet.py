@@ -69,14 +69,14 @@ def pearson(data_obs,data_model):
     r = a/(np.sqrt(b))
     return r
 
-INPUT_AERONET_MODIS = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod/"
-INPUT_AERONET_MAIAC = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_maiac/"
+INPUT_AERONET_MODIS = "/imagen_data/modis/results/aero_mod/"
+INPUT_AERONET_MAIAC = "/imagen_data/modis/results/aero_maiac/"
 listdir = os.listdir(INPUT_AERONET_MODIS)
 listdir =sorted(listdir, key=str.lower)
 listdir1 = os.listdir(INPUT_AERONET_MAIAC)
 listdir1 =sorted(listdir1, key=str.lower)
 
-OUTPUT = "/media/noelia/TOSHIBA EXT/doctorado/usp/imagen_data/modis/results/aero_mod_statis/estadistica/"
+OUTPUT = "/imagen_data/modis/results/aero_mod_statis/estadistica/"
 
 cities = ["Sao_Paulo","SP-EACH","Itajuba","Cachoeira_Paulista"]
 name1 = ["prom_60_min_AOD_aero","prom_30_min_AOD_aero","prom_15_min_AOD_aero"]
