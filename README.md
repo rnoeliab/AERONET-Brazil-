@@ -180,7 +180,7 @@ for m in listdir_aero:
                 mod = pd.read_csv(INPUT_MODIS+n)
 ```
 * Use,  `mod["year"] = mod["year"].astype(int).astype(str)` for "year,month,day,hour,min and sec".
-* This script is important because it selects the AOD data from the AERONET stations with a time of 60, 30 and 15 minutes before and after the passage of the MODIS sensor: 
+* This script is important because it selects the AOD data from the AERONET stations with a time of 60, 30 and 15 minutes before and after the hour of passage of the MODIS sensor: 
 ```python
 for k in range(len(aer)):
     ####  group by day
